@@ -20,7 +20,7 @@ export default function Home() {
         <div className='flex items-center'>
           <h1 className='font-medium text-[32px]'>
             Belajar dan praktek cinematic videography
-=          </h1>
+          </h1>
           <span className='text-tertiary text-xs ml-[32px] font-medium'>Last edited 18 October 2021 | 13:23</span>
         </div>
         <Button type='outline' onClick={() => {alert ('a')}} className='ml-auto'  >

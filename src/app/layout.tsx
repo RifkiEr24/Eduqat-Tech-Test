@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import Head from 'next/head'
 import SessionProvider from './context/SessionContext'
+import { NextUiProviders } from './providers/NextProvider'
 
 export const metadata: Metadata = {
   title: 'Lesson App',
@@ -15,14 +16,16 @@ export default function RootLayout({
 }) {
   return (
     <> 
-      <html lang="en">
+      <html lang="en" className='light'>
       <Head>
         <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet" />
       </Head> 
-       <body >
-        <SessionProvider>
-          {children}
-        </SessionProvider>
+       <body>
+        <NextUiProviders >
+          <SessionProvider>
+            {children}
+          </SessionProvider>
+        </NextUiProviders>
         </body>
      </html>
      </>

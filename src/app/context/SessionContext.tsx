@@ -10,6 +10,7 @@ export type Material = {
     previewable: boolean,
     time: string,
     duration: string,
+    durationType: string,
     downloadable: boolean
 }
 
@@ -21,9 +22,11 @@ export type Session = {
 
 type SessionContextType = {
     sessions: Session[] | [],
+    selectedSessionId: Session["id"] | '',
     addSession: (_session: Session) => void,
-    editSession: (sessionId : Session["id"], _newName: Session["name"]) => void,
+    editSessionName: (sessionId : Session["id"], _newName: Session["name"]) => void,
     setSessions: Dispatch<SetStateAction<Session[]>>,
+    setSelectedSessionId: Dispatch<SetStateAction<Session["id"]>>,
     deleteSession: (sessionId : Session["id"]) => void,
     addMaterial: (sessionId : Session["id"], _material: Material) => void,
     deleteMaterial: (sessionId : Session["id"], _material: Material['id']) => void
@@ -32,8 +35,9 @@ function noop(..._args: any[]): any {}
 
 const INITIAL_DATA = {
     sessions: [],
+    selectedSessionId: '',
     addSession: noop,
-    editSession: noop,
+    editSessionName: noop,
     setSessions: noop,
     deleteSession: noop,
     addMaterial: noop,
@@ -60,36 +64,42 @@ export default function SessionProvider({ children }: PropsWithChildren<{}>) {
                 type: 'video',
                 required: false,
                 previewable: true,
-                time: '24 Oktober 2021, 16:30',
-                duration: '06.30 min',
-                downloadable: true
+                time: '2023-10-05T19:45',
+                duration: '09:10',
+                downloadable: true,
+                durationType: 'min'
             }]
         },
         {
             id: 'b',
             name: 'Session 2',
             materials: [{
-                id: '1',
+                id: '1a',
                 name: 'Judul Video',
                 type: 'on_site',
                 required: true,
                 previewable: false,
-                time: '24 Oktober 2021, 16:30',
-                duration: '06.30 min',
-                downloadable: false
+                time: '2023-10-05T19:45',
+                duration: '07:20',
+                downloadable: false,
+                durationType: 'hour'
             },
             {
-                id: '2',
+                id: '2b',
                 name: 'Judul Video 2',
                 type: 'on_site',
                 required: true,
                 previewable: false,
-                time: '24 Oktober 2021, 16:30',
-                duration: '06.30 min',
-                downloadable: false
+                time: '2023-10-05T19:45',
+                duration: '06:30',
+                downloadable: false,
+                durationType: 'hour'
             }]
         }
     ])
+
+    const [selectedSessionId, setSelectedSessionId] = useState<Session['id']>('')
+
 
     const addSession = (newSession: Session) => {
         setSessions((currSession) => [...currSession, newSession ])
@@ -139,7 +149,7 @@ export default function SessionProvider({ children }: PropsWithChildren<{}>) {
     }
 
     const value ={
-        sessions, setSessions,  addSession, editSessionName, deleteSession, addMaterial, deleteMaterial
+        sessions,selectedSessionId, setSessions,  addSession, editSessionName, setSelectedSessionId, deleteSession, addMaterial, deleteMaterial
     }
 
     return (

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import Button from "../Button/Button";
 import PlusIcon from "../Icon/Plus";
 import SessionItem from "./SessionItem";
-import { Session, useSession } from '@/app/context/SessionContext';
+import { useSession } from '@/app/context/SessionContext';
 import {
     DndContext, 
     closestCenter,
@@ -20,9 +20,14 @@ import {
   
 import { DragEndEvent } from "@dnd-kit/core/dist/types";
 
-export default function SessionList({ onAddSessionClick }) {
+type SessionListProps = {
+  onAddSessionClick: () => void
+}
+
+export default function SessionList({ onAddSessionClick }: SessionListProps) {
 
     const { sessions, setSessions } = useSession()
+    
     const sensors = useSensors(
         useSensor(PointerSensor),
         useSensor(KeyboardSensor, {
