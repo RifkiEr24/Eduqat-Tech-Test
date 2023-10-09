@@ -20,7 +20,7 @@ export default function Navbar() {
                 <div className='flex gap-6 items-center'>
                     <LeftArrowIcon />
                     <StyledDivider />
-                    <h3 className={poppins.className + ' font-semibold'}>Event</h3>
+                    <h3 className={`${poppins.className} font-semibold` }>Event</h3>
                 </div>
         </div>
      
