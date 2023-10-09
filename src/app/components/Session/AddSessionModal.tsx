@@ -1,55 +1,84 @@
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter} from "@nextui-org/react";
-import {Input} from "@nextui-org/react";
-
 import Button from "../Button/Button";
 import { useSession } from "@/app/context/SessionContext";
 import { useState } from "react";
-import {Select, SelectItem} from "@nextui-org/react";
-import { randomUUID } from "crypto";
+import CustomInput from "../Input/Input";
+import { v4 as uuidv4 } from "uuid";
 
-export default function AddSessionModal({ ...props }) {
+type SessionModalProps = {
+  onOpen: () => void;
+  isOpen: boolean;
+  onClose: () => void;
+  onOpenChange: () => void;
+  placement:
+    | "center"
+    | "auto"
+    | "top"
+    | "top-center"
+    | "bottom"
+    | "bottom-center"
+    | undefined;
+};
+
+
+export default function AddSessionModal({
+  isOpen,
+  onOpen,
+  onClose,
+  onOpenChange,
+  placement,
+}: SessionModalProps) {
 
    const  { addSession } = useSession()
 
-   const [name, setname] = useState('')
+   const [name, setName] = useState('')
 
+   const [error, setError] = useState(false)
 
-   const [typeSelections, setTypeSelections] = useState([
-    { label: 'On Site', value: 'on_site' },
-    { label: 'Video', value: 'video' }
-  ])
 
 
    const handleClick = () => {
-    const newSession = {
-        id: randomUUID().toString().slice(0, 8) + '-session',
-        name: name,
-        materials: []
-    }
-    
-    addSession(newSession)
+      if (name) {
+        const newSession = {
+            id: uuidv4(),
+            name: name,
+            materials: []
+        }
+        
+        addSession(newSession)
+        setError(false)
+        onClose()
+        setName('')
+      } else {
+        setError(true)
+      }
 
   }
 
   return (
     <>
-      <Modal {...props}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpenChange={onOpenChange}
+        placement={placement}
+      >
         <ModalContent>
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">Add Session</ModalHeader>
               <ModalBody>
-                <Input value={name}   onValueChange={setname} type="text" label="Session Name" />
-                  <Select 
-                    label="Select an animal" 
-                    className="max-w-xs" 
-                  >
-                    {typeSelections.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
-                        {type.label}
-                      </SelectItem>
-                    ))}
-                  </Select>
+                <CustomInput
+                type="text"
+                value={name}     label="Session Name"
+                    key="Add Session"
+                    onChange={(e) => setName(e.target.value)}
+                 
+                    className="w-full"
+                  />
+                  {error && <>
+                  <span className="text-red-500 text-sm">Fill All Input!</span>
+                  </>}
               </ModalBody>
               <ModalFooter>
                 <Button type='outline' className='' onClick={onClose}>

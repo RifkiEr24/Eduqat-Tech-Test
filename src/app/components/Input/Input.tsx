@@ -9,9 +9,10 @@ type InputProps = {
         className?: string // Make className optional
 };
 
+
 export default function CustomInput({  ...props }: InputProps) {
     return (
-        <div className="flex flex-col gap-2 w-full text-sm text-tertiary">
+        <div className={`flex flex-col gap-2 w-full text-sm text-tertiary ${props.className}` }>
             <Input
                 key={props.key}
                 value={props.value}

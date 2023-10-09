@@ -50,7 +50,7 @@ export default function SessionList({ onAddSessionClick }: SessionListProps) {
 
     
     return (
-        <div className="h-[100vh]">
+        <div >
             <DndContext 
             sensors={sensors}
             collisionDetection={closestCenter}

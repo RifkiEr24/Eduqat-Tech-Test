@@ -6,14 +6,16 @@ import VideoIcon from "../../Icon/Video"
 import TimeIcon from "../../Icon/Time"
 import DownloadIcon from "../../Icon/Download"
 import ExpandIcon from "../../Icon/Expand"
-import { Material } from "@/app/context/SessionContext"
+import { Material, Session, useSession } from "@/app/context/SessionContext"
 import LocationIcon from "../../Icon/Location"
 import { useEffect, useState } from "react"
 import {useSortable} from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import {Dropdown, DropdownTrigger, DropdownMenu, DropdownItem} from "@nextui-org/react";
 
 type MaterialItemProps = {
-    material: Material
+    material: Material,
+    sessionId: Session["id"]
 }
 
 type formatDate = {
@@ -48,7 +50,7 @@ const StyledDivider = styled.div`
 `
 
 
-export default function MaterialItem({material}: MaterialItemProps) {
+export default function MaterialItem({material, sessionId}: MaterialItemProps) {
   
     const [formattedTime, setFormattedTime] = useState("");
 
@@ -74,6 +76,13 @@ export default function MaterialItem({material}: MaterialItemProps) {
         transform: CSS.Transform.toString(transform),
         transition,
     };
+
+    const {deleteMaterial} = useSession()
+
+    const handleDelete = () => {
+        deleteMaterial(sessionId, material.id)
+    }
+
     return (
        <div className="flex items-center" ref={setNodeRef} {...attributes} style={style}>
             <div className="flex gap-4 items-center">
@@ -110,8 +119,9 @@ export default function MaterialItem({material}: MaterialItemProps) {
                                   
                     </span>
                 </div>
-                <StyledDividerDot />
                 {material.downloadable && <>
+                    <StyledDividerDot />
+
                     <div className="flex items-center gap-2">
                         <DownloadIcon /> 
                         <span className="font-medium">
@@ -121,7 +131,20 @@ export default function MaterialItem({material}: MaterialItemProps) {
                     </>}
                 
                 <div className="ml-5">
-                    <ExpandIcon />
+                <Dropdown>
+                    <DropdownTrigger>
+                        <button>
+                         <ExpandIcon />
+
+                        </button>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Static Actions">
+                        <DropdownItem key="delete" onClick={handleDelete}>
+                            Delete Material
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+                  
                 </div>
             </div>
        </div>
